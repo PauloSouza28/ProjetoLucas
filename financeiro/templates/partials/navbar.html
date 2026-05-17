@@ -5,16 +5,28 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/dashboard/">Dashboard</a>
+          <a class="nav-link" href="/dashboard/"> Dashboard </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Receitas</a>
+          <a class="nav-link" href="#"> Receitas </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Despesas</a>
+          <a class="nav-link" href="#"> Despesas </a>
         </li>
+
+        {% if user.is_authenticated %}
+
+        <li class="nav-item">
+          <span class="nav-link text-warning"> Olá, {{ user.username }} </span>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link text-danger" href="/logout/"> Sair </a>
+        </li>
+
+        {% endif %}
       </ul>
     </div>
   </div>

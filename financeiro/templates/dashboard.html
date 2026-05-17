@@ -1,96 +1,135 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
+<h1 class="mb-4">Dashboard Financeiro</h1>
 
-<h1 class="mb-4">
-    Dashboard Financeiro
-</h1>
+<a href="/nova-movimentacao/" class="btn btn-success mb-4">
+  Nova Movimentação
+</a>
 
 <div class="row">
+  <div class="col-md-4">
+    <div class="card bg-success text-white p-3 shadow">
+      <h4>Receitas</h4>
 
-    <div class="col-md-4">
-        <div class="card bg-success text-white p-3 shadow">
-
-            <h4>Receitas</h4>
-
-            <h2>
-                R$ {{ total_receitas }}
-            </h2>
-
-        </div>
+      <h2>R$ {{ total_receitas }}</h2>
     </div>
+  </div>
 
-    <div class="col-md-4">
-        <div class="card bg-danger text-white p-3 shadow">
+  <div class="col-md-4">
+    <div class="card bg-danger text-white p-3 shadow">
+      <h4>Despesas</h4>
 
-            <h4>Despesas</h4>
-
-            <h2>
-                R$ {{ total_despesas }}
-            </h2>
-
-        </div>
+      <h2>R$ {{ total_despesas }}</h2>
     </div>
+  </div>
 
-    <div class="col-md-4">
-        <div class="card bg-primary text-white p-3 shadow">
+  <div class="col-md-4">
+    <div class="card bg-primary text-white p-3 shadow">
+      <h4>Saldo</h4>
 
-            <h4>Saldo</h4>
-
-            <h2>
-                R$ {{ saldo }}
-            </h2>
-
-        </div>
+      <h2>R$ {{ saldo }}</h2>
     </div>
-
+  </div>
 </div>
+
+<!-- GRÁFICO -->
+
+<div class="row mt-5">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-body">
+        <h4 class="mb-4">Receitas x Despesas</h4>
+
+        <canvas id="graficoFinanceiro"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABELA -->
 
 <div class="card mt-5 shadow">
+  <div class="card-body">
+    <h3 class="mb-4">Últimas Movimentações</h3>
 
-    <div class="card-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Título</th>
 
-        <h3 class="mb-4">
-            Últimas Movimentações
-        </h3>
+          <th>Tipo</th>
 
-        <table class="table">
+          <th>Valor</th>
 
-            <thead>
+          <th>Data</th>
 
-                <tr>
-                    <th>Título</th>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                    <th>Data</th>
-                </tr>
+          <th>Ações</th>
+        </tr>
+      </thead>
 
-            </thead>
+      <tbody>
+        {% for mov in movimentacoes %}
 
-            <tbody>
+        <tr>
+          <td>{{ mov.titulo }}</td>
 
-                {% for mov in movimentacoes %}
+          <td>{{ mov.tipo }}</td>
 
-                <tr>
+          <td>R$ {{ mov.valor }}</td>
 
-                    <td>{{ mov.titulo }}</td>
+          <td>{{ mov.data }}</td>
 
-                    <td>{{ mov.tipo }}</td>
+          <td>
+            <a
+              href="/editar-movimentacao/{{ mov.id }}/"
+              class="btn btn-primary btn-sm"
+            >
+              Editar
+            </a>
 
-                    <td>R$ {{ mov.valor }}</td>
+            <a
+              href="/excluir-movimentacao/{{ mov.id }}/"
+              class="btn btn-danger btn-sm"
+            >
+              Excluir
+            </a>
+          </td>
+        </tr>
 
-                    <td>{{ mov.data }}</td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<script defer>
+  window.onload = function () {
+    const receitas = Number("{{ total_receitas }}");
+
+    const despesas = Number("{{ total_despesas }}");
+
+    const ctx = document.getElementById("graficoFinanceiro");
+
+    new Chart(ctx, {
+      type: "doughnut",
+
+      data: {
+        labels: ["Receitas", "Despesas"],
+
+        datasets: [
+          {
+            label: "Financeiro",
+
+            data: [receitas, despesas],
+
+            backgroundColor: ["#198754", "#dc3545"],
+
+            borderWidth: 1,
+          },
+        ],
+      },
+    });
+  };
+</script>
 
 {% endblock %}
