@@ -7,7 +7,8 @@ from financeiro.views import (
     nova_movimentacao,
     editar_movimentacao,
     excluir_movimentacao,
-    logout_view
+    logout_view,
+    categorias
 )
 
 urlpatterns = [
@@ -37,6 +38,12 @@ urlpatterns = [
     excluir_movimentacao,
     name='excluir_movimentacao'
     ),
+
+    path(
+    'categorias/',
+    categorias,
+    name='categorias'
+),
 
     path(
         'logout/',

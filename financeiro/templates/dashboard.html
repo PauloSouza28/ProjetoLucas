@@ -40,7 +40,12 @@
       <div class="card-body">
         <h4 class="mb-4">Receitas x Despesas</h4>
 
-        <canvas id="graficoFinanceiro"></canvas>
+        <canvas
+    id="graficoFinanceiro"
+
+    data-receitas="{{ total_receitas }}"
+    data-despesas="{{ total_despesas }}"
+></canvas>
       </div>
     </div>
   </div>
@@ -52,84 +57,88 @@
   <div class="card-body">
     <h3 class="mb-4">Últimas Movimentações</h3>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Título</th>
+    <div class="movimentacoes-lista">
 
-          <th>Tipo</th>
+    {% for mov in movimentacoes %}
 
-          <th>Valor</th>
+    <div class="mov-card">
 
-          <th>Data</th>
+        <div class="mov-info">
 
-          <th>Ações</th>
-        </tr>
-      </thead>
+            <div class="mov-icon">
 
-      <tbody>
-        {% for mov in movimentacoes %}
+                {% if mov.tipo == 'RECEITA' %}
+                    💰
+                {% else %}
+                    💸
+                {% endif %}
 
-        <tr>
-          <td>{{ mov.titulo }}</td>
+            </div>
 
-          <td>{{ mov.tipo }}</td>
+            <div>
 
-          <td>R$ {{ mov.valor }}</td>
+                <h5>
+                    {{ mov.titulo }}
+                </h5>
 
-          <td>{{ mov.data }}</td>
+                <p>
+                    {{ mov.tipo }} • {{ mov.data }}
+                </p>
 
-          <td>
-            <a
-              href="/editar-movimentacao/{{ mov.id }}/"
-              class="btn btn-primary btn-sm"
+            </div>
+
+        </div>
+
+        <div class="mov-actions">
+
+            <h4
+                class="
+                {% if mov.tipo == 'RECEITA' %}
+                    receita
+                {% else %}
+                    despesa
+                {% endif %}
+                "
             >
-              Editar
-            </a>
 
-            <a
-              href="/excluir-movimentacao/{{ mov.id }}/"
-              class="btn btn-danger btn-sm"
-            >
-              Excluir
-            </a>
-          </td>
-        </tr>
+                {% if mov.tipo == 'RECEITA' %}
+                    +
+                {% else %}
+                    -
+                {% endif %}
 
-        {% endfor %}
-      </tbody>
-    </table>
+                R$ {{ mov.valor }}
+
+            </h4>
+
+            <div class="buttons">
+
+                <a
+                    href="/editar-movimentacao/{{ mov.id }}/"
+                    class="btn btn-primary btn-sm"
+                >
+                    Editar
+                </a>
+
+                <a
+                    href="/excluir-movimentacao/{{ mov.id }}/"
+                    class="btn btn-danger btn-sm"
+                >
+                    Excluir
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
   </div>
 </div>
 
-<script defer>
-  window.onload = function () {
-    const receitas = Number("{{ total_receitas }}");
 
-    const despesas = Number("{{ total_despesas }}");
-
-    const ctx = document.getElementById("graficoFinanceiro");
-
-    new Chart(ctx, {
-      type: "doughnut",
-
-      data: {
-        labels: ["Receitas", "Despesas"],
-
-        datasets: [
-          {
-            label: "Financeiro",
-
-            data: [receitas, despesas],
-
-            backgroundColor: ["#198754", "#dc3545"],
-
-            borderWidth: 1,
-          },
-        ],
-      },
-    });
-  };
-</script>
 
 {% endblock %}

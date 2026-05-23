@@ -2,6 +2,36 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Categoria(models.Model):
+
+    TIPO_CHOICES = [
+        ('RECEITA', 'Receita'),
+        ('DESPESA', 'Despesa'),
+    ]
+
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    nome = models.CharField(
+        max_length=100
+    )
+
+    tipo = models.CharField(
+        max_length=10,
+        choices=TIPO_CHOICES
+    )
+
+    cor = models.CharField(
+        max_length=20,
+        default='#38bdf8'
+    )
+
+    def __str__(self):
+        return self.nome
+
+
 class Movimentacao(models.Model):
 
     TIPO_CHOICES = [
@@ -31,6 +61,13 @@ class Movimentacao(models.Model):
     descricao = models.TextField(
         blank=True,
         null=True
+    )
+
+    categoria = models.ForeignKey(
+        Categoria,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     data = models.DateField()

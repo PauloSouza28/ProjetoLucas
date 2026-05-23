@@ -1,33 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#"> Controle Financeiro </a>
+<div class="sidebar">
+  <div class="logo">FinancePro</div>
 
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/dashboard/"> Dashboard </a>
-        </li>
+  <a href="/dashboard/"> Dashboard </a>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#"> Receitas </a>
-        </li>
+  <a href="/nova-movimentacao/"> Nova Movimentação </a>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#"> Despesas </a>
-        </li>
+  <a href="#"> Histórico </a>
 
-        {% if user.is_authenticated %}
+  <a class="nav-link" href="/categorias/">
+    Categorias
+  </a>
 
-        <li class="nav-item">
-          <span class="nav-link text-warning"> Olá, {{ user.username }} </span>
-        </li>
+  <a href="/logout/"> Sair </a>
 
-        <li class="nav-item">
-          <a class="nav-link text-danger" href="/logout/"> Sair </a>
-        </li>
+  <hr />
 
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
+  <p>👤 {{ request.user.username }}</p>
+</div>

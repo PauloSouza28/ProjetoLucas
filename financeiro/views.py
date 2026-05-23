@@ -5,6 +5,8 @@ from django.db.models import Sum
 from .forms import MovimentacaoForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from .models import Categoria
+from .forms import CategoriaForm
 
 
 def home(request):
@@ -149,6 +151,47 @@ def excluir_movimentacao(request, id):
     movimentacao.delete()
 
     return redirect('dashboard')
+
+@login_required
+def categorias(request):
+
+    form = CategoriaForm()
+
+    if request.method == 'POST':
+
+        form = CategoriaForm(request.POST)
+
+        if form.is_valid():
+
+            categoria = form.save(commit=False)
+
+            categoria.usuario = request.user
+
+            categoria.save()
+
+            return redirect('categorias')
+
+    categorias_receita = Categoria.objects.filter(
+        usuario=request.user,
+        tipo='RECEITA'
+    )
+
+    categorias_despesa = Categoria.objects.filter(
+        usuario=request.user,
+        tipo='DESPESA'
+    )
+
+    context = {
+        'form': form,
+        'categorias_receita': categorias_receita,
+        'categorias_despesa': categorias_despesa,
+    }
+
+    return render(
+        request,
+        'categorias.html',
+        context
+    )
 
 @login_required
 def logout_view(request):

@@ -51,3 +51,6 @@ LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Recife'
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+]
