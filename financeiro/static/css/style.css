@@ -218,3 +218,264 @@ body {
 
     justify-content: end;
 }
+
+.categoria-texto {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* =========================
+   GERAL
+========================= */
+
+body {
+    background-color: #0f172a;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    border: none;
+    border-radius: 18px;
+    background-color: #1e293b;
+    color: white;
+}
+
+/* =========================
+   MOVIMENTAÇÕES
+========================= */
+
+.movimentacoes-lista {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.mov-card {
+
+    background: #111827;
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 20px;
+
+    border: 1px solid #334155;
+
+    transition: 0.3s;
+
+    overflow: hidden;
+}
+
+.mov-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #38bdf8;
+}
+
+.mov-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    flex: 1;
+
+    min-width: 220px;
+}
+
+.mov-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    border-radius: 50%;
+
+    background: #0f172a;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    flex-shrink: 0;
+}
+
+.mov-info h5 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    word-break: break-word;
+}
+
+.mov-info p {
+
+    margin: 0;
+
+    color: #94a3b8;
+
+    word-break: break-word;
+}
+
+.mov-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 10px;
+
+    max-width: 220px;
+
+    width: 100%;
+}
+
+.mov-actions h4 {
+
+    margin: 0;
+
+    font-weight: bold;
+
+    word-break: break-word;
+}
+
+.receita {
+    color: #22c55e;
+}
+
+.despesa {
+    color: #ef4444;
+}
+
+.buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    justify-content: flex-end;
+}
+
+.categoria-texto {
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    margin-top: 5px;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn-primary {
+    background-color: #38bdf8;
+    border: none;
+}
+
+.btn-success {
+    border: none;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.form-control,
+.form-select {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px #38bdf8;
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+
+        width: 100%;
+
+        min-height: auto;
+
+        position: relative;
+    }
+
+    .main-content {
+
+        margin-left: 0;
+
+        padding: 15px;
+    }
+
+    .mov-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .mov-actions {
+
+        width: 100%;
+
+        align-items: flex-start;
+    }
+
+    .buttons {
+
+        justify-content: flex-start;
+    }
+
+    .col-md-4,
+    .col-md-6,
+    .col-md-3,
+    .col-md-2 {
+
+        width: 100%;
+    }
+
+    canvas {
+
+        max-height: 250px;
+    }
+}

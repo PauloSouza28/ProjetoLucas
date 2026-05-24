@@ -1,144 +1,259 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block content %}
 
 <h1 class="mb-4">Dashboard Financeiro</h1>
 
 <a href="/nova-movimentacao/" class="btn btn-success mb-4">
-  Nova Movimentação
+    Nova Movimentação
 </a>
 
+<!-- CARDS -->
+
 <div class="row">
-  <div class="col-md-4">
-    <div class="card bg-success text-white p-3 shadow">
-      <h4>Receitas</h4>
 
-      <h2>R$ {{ total_receitas }}</h2>
+    <div class="col-md-4">
+        <div class="card bg-success text-white p-3 shadow">
+
+            <h4>Receitas</h4>
+
+            <h2>
+                R$ {{ total_receitas }}
+            </h2>
+
+        </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="card bg-danger text-white p-3 shadow">
-      <h4>Despesas</h4>
+    <div class="col-md-4">
+        <div class="card bg-danger text-white p-3 shadow">
 
-      <h2>R$ {{ total_despesas }}</h2>
+            <h4>Despesas</h4>
+
+            <h2>
+                R$ {{ total_despesas }}
+            </h2>
+
+        </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="card bg-primary text-white p-3 shadow">
-      <h4>Saldo</h4>
+    <div class="col-md-4">
+        <div class="card bg-primary text-white p-3 shadow">
 
-      <h2>R$ {{ saldo }}</h2>
+            <h4>Saldo</h4>
+
+            <h2>
+                R$ {{ saldo }}
+            </h2>
+
+        </div>
     </div>
-  </div>
+
 </div>
 
 <!-- GRÁFICO -->
 
 <div class="row mt-5">
-  <div class="col-md-6">
-    <div class="card shadow">
-      <div class="card-body">
-        <h4 class="mb-4">Receitas x Despesas</h4>
 
-        <canvas
-    id="graficoFinanceiro"
+    <div class="col-md-6">
 
-    data-receitas="{{ total_receitas }}"
-    data-despesas="{{ total_despesas }}"
-></canvas>
-      </div>
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h4 class="mb-4">
+                    Receitas x Despesas
+                </h4>
+
+                <canvas
+                    id="graficoFinanceiro"
+                    data-receitas="{{ total_receitas }}"
+                    data-despesas="{{ total_despesas }}"
+                ></canvas>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
 </div>
 
-<!-- TABELA -->
+<!-- ESPAÇO -->
+
+<div class="mt-5"></div>
+
+<!-- FILTROS -->
+
+<form method="GET" class="row g-3 mb-4">
+
+    <div class="col-md-3">
+
+        <input
+            type="text"
+            name="busca"
+            class="form-control"
+            placeholder="Buscar título..."
+        >
+
+    </div>
+
+    <div class="col-md-2">
+
+        <select name="tipo" class="form-select">
+
+            <option value="">
+                Todos
+            </option>
+
+            <option value="RECEITA">
+                Receita
+            </option>
+
+            <option value="DESPESA">
+                Despesa
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <select name="categoria" class="form-select">
+
+            <option value="">
+                Todas Categorias
+            </option>
+
+            {% for cat in categorias %}
+
+            <option value="{{ cat.id }}">
+                {{ cat.nome }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="col-md-2">
+
+        <input
+            type="date"
+            name="data"
+            class="form-control"
+        >
+
+    </div>
+
+    <div class="col-md-2">
+
+        <button class="btn btn-primary w-100">
+            Filtrar
+        </button>
+
+    </div>
+
+</form>
+
+<!-- TABELA / MOVIMENTAÇÕES -->
 
 <div class="card mt-5 shadow">
-  <div class="card-body">
-    <h3 class="mb-4">Últimas Movimentações</h3>
 
-    <div class="movimentacoes-lista">
+    <div class="card-body">
 
-    {% for mov in movimentacoes %}
+        <h3 class="mb-4">
+            Últimas Movimentações
+        </h3>
 
-    <div class="mov-card">
+        <div class="movimentacoes-lista">
 
-        <div class="mov-info">
+            {% for mov in movimentacoes %}
 
-            <div class="mov-icon">
+            <div class="mov-card">
 
-                {% if mov.tipo == 'RECEITA' %}
-                    💰
-                {% else %}
-                    💸
-                {% endif %}
+                <div class="mov-info">
+
+                    <div class="mov-icon">
+
+                        {% if mov.tipo == 'RECEITA' %}
+                            💰
+                        {% else %}
+                            💸
+                        {% endif %}
+
+                    </div>
+
+                    <div>
+
+                        <h5>
+                            {{ mov.titulo }}
+                        </h5>
+
+                        <p>
+                            {{ mov.tipo }} • {{ mov.data }}
+                        </p>
+
+                        <p class="categoria-texto">
+                            Categoria:
+                            {{ mov.categoria }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="mov-actions">
+
+                    <h4
+                        class="
+                        {% if mov.tipo == 'RECEITA' %}
+                            receita
+                        {% else %}
+                            despesa
+                        {% endif %}
+                        "
+                    >
+
+                        {% if mov.tipo == 'RECEITA' %}
+                            +
+                        {% else %}
+                            -
+                        {% endif %}
+
+                        R$ {{ mov.valor }}
+
+                    </h4>
+
+                    <div class="buttons mt-2">
+
+                        <a
+                            href="/editar-movimentacao/{{ mov.id }}/"
+                            class="btn btn-primary btn-sm"
+                        >
+                            Editar
+                        </a>
+
+                        <a
+                            href="/excluir-movimentacao/{{ mov.id }}/"
+                            class="btn btn-danger btn-sm"
+                        >
+                            Excluir
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div>
-
-                <h5>
-                    {{ mov.titulo }}
-                </h5>
-
-                <p>
-                    {{ mov.tipo }} • {{ mov.data }}
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="mov-actions">
-
-            <h4
-                class="
-                {% if mov.tipo == 'RECEITA' %}
-                    receita
-                {% else %}
-                    despesa
-                {% endif %}
-                "
-            >
-
-                {% if mov.tipo == 'RECEITA' %}
-                    +
-                {% else %}
-                    -
-                {% endif %}
-
-                R$ {{ mov.valor }}
-
-            </h4>
-
-            <div class="buttons">
-
-                <a
-                    href="/editar-movimentacao/{{ mov.id }}/"
-                    class="btn btn-primary btn-sm"
-                >
-                    Editar
-                </a>
-
-                <a
-                    href="/excluir-movimentacao/{{ mov.id }}/"
-                    class="btn btn-danger btn-sm"
-                >
-                    Excluir
-                </a>
-
-            </div>
+            {% endfor %}
 
         </div>
 
     </div>
 
-    {% endfor %}
-
 </div>
-  </div>
-</div>
-
-
 
 {% endblock %}

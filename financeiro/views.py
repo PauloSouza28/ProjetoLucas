@@ -29,7 +29,7 @@ def login_view(request):
         if user:
             login(request, user)
 
-            return redirect('home')
+            return redirect('dashboard')
 
     return render(request, 'login.html')
 
@@ -37,14 +37,41 @@ def login_view(request):
 @login_required
 def dashboard(request):
 
-    receitas = Movimentacao.objects.filter(
-    usuario=request.user,
-    tipo='RECEITA'
+    movimentacoes = Movimentacao.objects.filter(
+        usuario=request.user
     )
 
-    despesas = Movimentacao.objects.filter(
-    usuario=request.user,
-    tipo='DESPESA'
+    tipo = request.GET.get('tipo')
+    categoria = request.GET.get('categoria')
+    data = request.GET.get('data')
+    busca = request.GET.get('busca')
+
+    if tipo:
+        movimentacoes = movimentacoes.filter(
+            tipo=tipo
+        )
+
+    if categoria:
+        movimentacoes = movimentacoes.filter(
+            categoria__id=categoria
+        )
+
+    if data:
+        movimentacoes = movimentacoes.filter(
+            data=data
+        )
+
+    if busca:
+        movimentacoes = movimentacoes.filter(
+            titulo__icontains=busca
+        )
+
+    receitas = movimentacoes.filter(
+        tipo='RECEITA'
+    )
+
+    despesas = movimentacoes.filter(
+        tipo='DESPESA'
     )
 
     total_receitas = receitas.aggregate(
@@ -57,15 +84,16 @@ def dashboard(request):
 
     saldo = total_receitas - total_despesas
 
-    movimentacoes = Movimentacao.objects.filter(
-    usuario=request.user
-    ).order_by('-data')
+    categorias = Categoria.objects.filter(
+        usuario=request.user
+    )
 
     context = {
+        'movimentacoes': movimentacoes.order_by('-data'),
         'total_receitas': total_receitas,
         'total_despesas': total_despesas,
         'saldo': saldo,
-        'movimentacoes': movimentacoes,
+        'categorias': categorias,
     }
 
     return render(
