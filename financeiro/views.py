@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from .models import Categoria
 from .forms import CategoriaForm
+from django.contrib.auth.models import User
+from .models import MetaFinanceira
+from .forms import MetaFinanceiraForm
 
 
 def home(request):
@@ -27,9 +30,20 @@ def login_view(request):
         )
 
         if user:
+
             login(request, user)
 
             return redirect('dashboard')
+
+        else:
+
+            return render(
+                request,
+                'login.html',
+                {
+                    'erro': 'Usuário ou senha inválidos'
+                }
+            )
 
     return render(request, 'login.html')
 
@@ -220,6 +234,131 @@ def categorias(request):
         'categorias.html',
         context
     )
+
+def cadastro_view(request):
+
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+
+        email = request.POST.get('email')
+
+        password = request.POST.get('password')
+
+        confirmar = request.POST.get('confirmar')
+
+        if password != confirmar:
+
+            return render(
+                request,
+                'cadastro.html',
+                {
+                    'erro': 'As senhas não coincidem'
+                }
+            )
+
+        if User.objects.filter(username=username).exists():
+
+            return render(
+                request,
+                'cadastro.html',
+                {
+                    'erro': 'Usuário já existe'
+                }
+            )
+
+        User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        return redirect('login')
+
+    return render(request, 'cadastro.html')
+
+@login_required
+def metas(request):
+
+    form = MetaFinanceiraForm()
+
+    if request.method == 'POST':
+
+        form = MetaFinanceiraForm(request.POST)
+
+        if form.is_valid():
+
+            meta = form.save(commit=False)
+
+            meta.usuario = request.user
+
+            meta.save()
+
+            return redirect('metas')
+
+    metas = MetaFinanceira.objects.filter(
+        usuario=request.user
+    )
+
+    context = {
+        'form': form,
+        'metas': metas
+    }
+
+    return render(
+        request,
+        'metas.html',
+        context
+    )
+
+@login_required
+def editar_meta(request, id):
+
+    meta = get_object_or_404(
+        MetaFinanceira,
+        id=id,
+        usuario=request.user
+    )
+
+    form = MetaFinanceiraForm(
+        instance=meta
+    )
+
+    if request.method == 'POST':
+
+        form = MetaFinanceiraForm(
+            request.POST,
+            instance=meta
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect('metas')
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'editar_meta.html',
+        context
+    )
+
+@login_required
+def excluir_meta(request, id):
+
+    meta = get_object_or_404(
+        MetaFinanceira,
+        id=id,
+        usuario=request.user
+    )
+
+    meta.delete()
+
+    return redirect('metas')
 
 @login_required
 def logout_view(request):

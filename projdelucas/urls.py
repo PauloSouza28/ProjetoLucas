@@ -8,7 +8,11 @@ from financeiro.views import (
     editar_movimentacao,
     excluir_movimentacao,
     logout_view,
-    categorias
+    categorias,
+    cadastro_view,
+    metas,
+    editar_meta,
+    excluir_meta
 )
 
 urlpatterns = [
@@ -40,6 +44,12 @@ urlpatterns = [
     ),
 
     path(
+    'cadastro/',
+    cadastro_view,
+    name='cadastro'
+),
+
+    path(
     'categorias/',
     categorias,
     name='categorias'
@@ -50,4 +60,22 @@ urlpatterns = [
         logout_view,
         name='logout'
     ),
+
+    path(
+    'metas/',
+    metas,
+    name='metas'
+),
+
+path(
+    'editar-meta/<int:id>/',
+    editar_meta,
+    name='editar_meta'
+),
+
+path(
+    'excluir-meta/<int:id>/',
+    excluir_meta,
+    name='excluir_meta'
+),
 ]

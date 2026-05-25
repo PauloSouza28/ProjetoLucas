@@ -1,5 +1,6 @@
 from django import forms
 from .models import Movimentacao, Categoria
+from .models import MetaFinanceira
 
 
 class MovimentacaoForm(forms.ModelForm):
@@ -86,3 +87,37 @@ class CategoriaForm(forms.ModelForm):
                 'class': 'form-control form-control-color'
             }),
         }
+
+
+class MetaFinanceiraForm(forms.ModelForm):
+
+    class Meta:
+
+        model = MetaFinanceira
+
+        fields = [
+            'nome',
+            'valor_meta',
+            'valor_atual',
+            'prazo'
+        ]
+
+        widgets = {
+
+            'nome': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'valor_meta': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'valor_atual': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+
+            'prazo': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control'
+            }),
+        }        
