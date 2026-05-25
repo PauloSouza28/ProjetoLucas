@@ -6,14 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!canvas) return;
 
-    const receitas = Number(
-        canvas.dataset.receitas
-    );
+    const receitas = parseFloat(
+    canvas.dataset.receitas.replace(',', '.')
+);
 
-    const despesas = Number(
-        canvas.dataset.despesas
-    );
-
+const despesas = parseFloat(
+    canvas.dataset.despesas.replace(',', '.')
+);
     new Chart(canvas, {
 
         type: 'line',
